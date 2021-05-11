@@ -1,0 +1,42 @@
+{
+  "name": "sala_mesh",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gabriel-barbosa-seibt/teste_sala_mesh.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "node-static": "^0.7.11",
+    "nvm": "0.0.4",
+    "selfsigned": "^1.10.8",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "socketio": "^1.0.0",
+    "swagger": "^0.7.5",
+    "swagger-ui": "^3.36.0",
+    "swagger-ui-express": "^4.1.4",
+    "ui": "^0.2.4"
+  },
+  "homepage": "https://github.com/gabriel-barbosa-seibt/teste_sala_mesh#readme",
+  "description": "",
+  "devDependencies": {
+    "@wdio/cli": "^6.12.0",
+    "jest": "^26.6.3",
+    "supertest": "^6.0.1",
+    "webdriverio": "^6.12.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  }
+}

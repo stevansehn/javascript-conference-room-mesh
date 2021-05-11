@@ -1,0 +1,7 @@
+{
+  "expo": {
+    "name": "My app",
+    "slug": "my-app",
+    "port": 3000
+  }
+}

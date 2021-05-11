@@ -1,0 +1,351 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a sample API documentation by Gabriel Barbosa Seibt and Stevan Sehn.",
+    "version": "1.0.0",
+    "title": "WebRTC LINSE",
+    "termsOfService": "https://www.linse.ufsc.br/",
+    "contact": {
+      "email": "stevan@linse.ufsc.com"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Chat",
+      "description": "Mesh WebRTC",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
+      }
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/rooms": {
+      "get": {
+        "tags": [
+          "View all Rooms"
+        ],
+        "summary": "View Room Names and Number of Peers",
+        "description": "This endpoint uses a get request to retrieve all rooms",
+        "operationId": "AllRooms",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AllRooms"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        }
+      }
+    },
+    "/rooms/stats": {
+      "get": {
+        "tags": [
+          "View All Stats"
+        ],
+        "summary": "View all statistics",
+        "description": "This endpoint uses a get request to retrieve all statistics",
+        "operationId": "AllStats",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AllStats"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        }
+      }
+    },
+    "/rooms/{roomId}": {
+      "get": {
+        "tags": [
+          "View Peers in Room"
+        ],
+        "summary": "View room peers",
+        "description": "This endpoint displays the peers of a specific room",
+        "operationId": "RoomPeers",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "description": "This is the unique identifier of the room",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/RoomPeers"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          },
+          "404": {
+            "description": "The room does not exist!"
+          }
+        }
+      }
+    },
+    "/rooms/{roomId}/stats": {
+      "get": {
+        "tags": [
+          "View Room Stats"
+        ],
+        "summary": "View room statistics",
+        "description": "This endpoint displays the stats of a specific room",
+        "operationId": "RoomStats",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "description": "This is the unique identifier of the room",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/RoomStats"
+              }
+            }
+          },
+          "204": {
+            "description": "No stats found in this room..."
+          },
+          "400": {
+            "description": "Invalid status value"
+          },
+          "404": {
+            "description": "The room does not exist!"
+          }
+        }
+      }
+    },
+    "/rooms/{roomId}/peers/{peerId}/stats": {
+      "get": {
+        "tags": [
+          "View Peer Stats"
+        ],
+        "summary": "View peer statistics",
+        "description": "This endpoint displays the stats of a specific peer",
+        "operationId": "PeerStats",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "description": "This is the unique identifier of the room",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "peerId",
+            "in": "path",
+            "description": "This is the unique identifier of the peer",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PeerStats"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          },
+          "404": {
+            "description": "The room does not exist!"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AllRooms": {
+      "type": "object",
+      "properties": {
+          "id": {
+          "type": "string"
+        },
+        "numOfPeers": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "AllStats": {
+      "type": "object",
+      "properties": {
+        "roomId": {"type": "string"},
+        "roomConnections": {
+          "properties": {
+            "peerId": {"type": "string"},
+            "connections": {
+              "properties": {
+                "id": {"type": "string"},
+                "stats": {
+                  "properties": {
+                    "packetsLost": {
+                      "type": "number",
+                      "format": "float"
+                    },
+                    "packetsReceived": {
+                      "type": "number",
+                      "format": "float"
+                    },
+                    "packetsSent": {
+                      "type": "number",
+                      "format": "float"
+                    },
+                    "bytesSent": {
+                      "type": "number",
+                      "format": "float"
+                    },
+                    "bytesReceived": {
+                      "type": "number",
+                      "format": "float"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "RoomPeers": {
+      "type": "object",
+      "properties": {
+        "peerIds": {
+          "type": "string"
+        }
+      }
+    },
+    "RoomStats": {
+      "type": "object",
+      "properties": {
+        "roomConnections": {
+          "properties": {
+            "peerId": {"type": "string"},
+            "connections": {
+              "properties": {
+                "id": {"type": "string"},
+                "stats": {
+                  "properties": {
+                    "packetsLost": {
+                      "type": "number",
+                      "format": "float"
+                    },
+                    "packetsReceived": {
+                      "type": "number",
+                      "format": "float"
+                    },
+                    "packetsSent": {
+                      "type": "number",
+                      "format": "float"
+                    },
+                    "bytesSent": {
+                      "type": "number",
+                      "format": "float"
+                    },
+                    "bytesReceived": {
+                      "type": "number",
+                      "format": "float"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "PeerStats": {
+      "type": "object",
+      "properties": {
+        "connections": {
+          "properties": {
+            "id": {"type": "string"},
+            "stats": {
+              "properties": {
+                "packetsLost": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "packetsReceived": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "packetsSent": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "bytesSent": {
+                  "type": "number",
+                  "format": "float"
+                },
+                "bytesReceived": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

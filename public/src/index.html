@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+
+	<title>Teste Sala Mesh</title>
+
+</head>
+
+<body>
+
+	<div id='mainDiv'>
+
+		<table border="1" width="100%">
+			<tr>
+				<th>
+					Local video
+				</th>
+				<th>
+					'Remote' video
+				</th>
+			</tr>
+			<tr>
+				<td>
+					<video id="localVideo"></video>
+					<button id="muteButton">Mutar</button>
+					<div class="messageContainer">
+						<textarea id="dataChannelReceive" disabled></textarea>
+					</div>
+					<div class="main__message_container">
+						<textarea id="dataChannelSend" placeholder="Escreva a mensagem aqui"></textarea>
+						<button id="sendButton">Mandar Mensagem</button>
+					</div>
+				</td>
+				<td>
+					<div id="remoteVideoContainer">
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<script src='/socket.io/socket.io.js'></script>
+	<script src='/public/adapter/adapter.js'></script>
+	<script src='/public/src/clientMeshLinse.js'></script>
+	<script src='/public/src/FakeClient.js'></script>
+	<script>
+		// HTML5 <video> elements
+		const localVideo = document.querySelector("#localVideo");
+		const remoteVideoContainer = document.querySelector("#remoteVideoContainer");
+		const muteButton = document.getElementById('muteButton');
+		const sendButton = document.getElementById('sendButton');
+		let textArea = document.getElementById('dataChannelSend');
+		let receivedMessage = document.getElementById('dataChannelReceive');
+
+		// const room = 'teste';
+		const room = prompt("Enter room name:");
+
+		const cml = new LinseMeshClient(room);
+
+		const peerConfig = null;
+
+		function handleMessage(message){
+			console.log(message);
+			receivedMessage.value = message;
+		}
+
+		function handleUserMedia(stream) {
+			const localStream = stream;
+			console.log(localStream);
+			localVideo.srcObject = localStream;
+			localVideo.muted = true;
+			localVideo.onloadedmetadata= () => localVideo.play();
+			console.log("Adicionando stream local.");
+		}
+
+		function handleRemoteStream(evt){
+			const videoElement = document.createElement('video');
+			videoElement.id = evt.id;
+			videoElement.srcObject = evt.stream;
+			videoElement.onloadedmetadata = () => videoElement.play();
+			remoteVideoContainer.appendChild(videoElement);
+		}
+
+		function removeRemoteVideo(peerId){
+			remoteVideo = document.getElementById(peerId);
+			remoteVideoContainer.removeChild(remoteVideo);
+		}
+
+		cml.start();
+
+		cml.on('message', evt =>{
+			handleMessage(evt);
+		});
+
+		cml.on('localStream', evt=>{
+			handleUserMedia(evt);
+		});
+
+		cml.on('remoteStream', evt=>{
+			handleRemoteStream(evt);
+		});
+
+		cml.on('peerDisconnected', evt =>{
+			removeRemoteVideo(evt);
+		});
+
+		muteButton.onclick = () => cml.muteLocal();
+		sendButton.onclick = () => cml.sendMessage(textArea.value);
+
+	</script>
+
+</body>
+
+</html>
